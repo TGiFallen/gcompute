@@ -16,6 +16,8 @@ surface.CreateFont (
 	}
 )
 
+CreateClientConVar("gcompute_ignore_tilde", 0 , true, false )
+
 --[[
 	Events:
 		CaretMoved (LineColumnLocation caretLocation)
@@ -56,6 +58,11 @@ function PANEL:Init ()
 		local alt     = input.IsKeyDown (KEY_LALT)     or input.IsKeyDown (KEY_RALT)
 	
 		local pasted = ctrl and input.IsKeyDown (KEY_V)
+
+		if self.TildeBlock then
+			self.TextEntry:SetText ("")
+			self.TildeBlock = false
+		end
 		
 		local text = self.TextEntry:GetValue ()
 		self.TextEntry:SetText ("")
@@ -1476,6 +1483,10 @@ function PANEL:OnKeyCodeTyped (keyCode)
 	local ctrl    = input.IsKeyDown (KEY_LCONTROL) or input.IsKeyDown (KEY_RCONTROL)
 	local shift   = input.IsKeyDown (KEY_LSHIFT)   or input.IsKeyDown (KEY_RSHIFT)
 	local alt     = input.IsKeyDown (KEY_LALT)     or input.IsKeyDown (KEY_RALT)
+
+	if keyCode == KEY_BACKQUOTE and GetConVarNumber ("gcompute_ignore_tilde") == 1 then -- tilde or "console key" `
+		self.TildeBlock = true
+	end
 	
 	if self:GetCodeCompletionProvider () and
 	   self:GetCodeCompletionProvider ():HandleKey (keyCode, ctrl, shift, alt) then

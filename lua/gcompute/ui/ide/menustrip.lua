@@ -62,6 +62,18 @@ function GCompute.IDE.MenuStrip (self)
 	)
 	
 	local toolsMenu = menuStrip:AddMenu ("Tools")
+	toolsMenu:AddItem("Ignore Tilde")
+		:AddEventListener("Click",
+		function()
+		RunConsoleCommand ("gcompute_ignore_tilde", 1)
+	end
+	)
+	toolsMenu:AddItem("Capture Tilde")
+		:AddEventListener("Click",
+		function()
+		RunConsoleCommand("gcompute_ignore_tilde", 0)
+	end
+	)
 	toolsMenu:AddItem ("Settings")
 		:SetAction ("Open Settings")
 	
